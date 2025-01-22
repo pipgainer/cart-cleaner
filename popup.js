@@ -41,7 +41,7 @@ document.getElementById("stopBtn").addEventListener("click", () => {
 function checkCartPage(callback) {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         const url = tabs[0].url;
-        if (url.includes("https://www.amazon.in/gp/cart/view.html")) {
+        if (url.includes("https://www.amazon.") && (url.includes("/gp/cart/view.html") || url.includes("/cart?"))) {
             callback("amazon");
         } else if (url.includes("https://www.flipkart.com/viewcart")) {
             callback("flipkart");
@@ -92,22 +92,22 @@ function deleteCartItems(platform) {
                 if (itemsToDelete.length > 0) {
                     // Click on each remove button
                     itemsToDelete.forEach(button => {
-                      button.click(); // Click to remove the item
-                      
-                      // Wait for the modal to appear and click the confirm button
-                      setTimeout(() => {
-                        const confirmButton = Array.from(document.querySelectorAll('div.sBxzFz'))
-                          .find(div => div.textContent.trim() === "Remove"); // Find the 'Remove' text in the modal
-                        if (confirmButton) {
-                          confirmButton.click(); // Click the 'Remove' text in the modal
-                        }
-                      }, 500); // Adjust the timeout as necessary to wait for the modal to appear
+                        button.click(); // Click to remove the item
+
+                        // Wait for the modal to appear and click the confirm button
+                        setTimeout(() => {
+                            const confirmButton = Array.from(document.querySelectorAll('div.sBxzFz'))
+                                .find(div => div.textContent.trim() === "Remove"); // Find the 'Remove' text in the modal
+                            if (confirmButton) {
+                                confirmButton.click(); // Click the 'Remove' text in the modal
+                            }
+                        }, 500); // Adjust the timeout as necessary to wait for the modal to appear
                     });
-          
+
                     setTimeout(deleteItems, 1000); // Recheck after a delay to account for modal interactions
-                  } else {
+                } else {
                     alert("All Flipkart cart items deleted.");
-                  }
+                }
             }
             deleteItems();
         }
@@ -156,18 +156,18 @@ function deleteSavedForLaterItems(platform) {
                     // Click on each remove button
                     itemsToDelete.forEach(button => {
                         button.click(); // Click to remove the item
-                        
+
                         // Wait for the modal to appear and click the confirm button
                         setTimeout(() => {
-                          const confirmButton = Array.from(document.querySelectorAll('div.sBxzFz'))
-                            .find(div => div.textContent.trim() === "Remove"); // Find the 'Remove' text in the modal
-                          if (confirmButton) {
-                            confirmButton.click(); // Click the 'Remove' text in the modal
-                          }
+                            const confirmButton = Array.from(document.querySelectorAll('div.sBxzFz'))
+                                .find(div => div.textContent.trim() === "Remove"); // Find the 'Remove' text in the modal
+                            if (confirmButton) {
+                                confirmButton.click(); // Click the 'Remove' text in the modal
+                            }
                         }, 500); // Adjust the timeout as necessary to wait for the modal to appear
-                      });
-            
-                      setTimeout(deleteItems, 1000); // Recheck after a delay to account for modal interactions
+                    });
+
+                    setTimeout(deleteItems, 1000); // Recheck after a delay to account for modal interactions
                 } else {
                     alert("All 'Saved for Later' items deleted on Flipkart.");
                 }
